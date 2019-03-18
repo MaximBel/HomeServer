@@ -1,12 +1,12 @@
 /*
- * DataStorage.cpp
+ * Archivarius.cpp
  *
  *  Created on: Feb 18, 2019
  *      Author: maksym.belei
  */
 
 
-#include "../inc/DataStorage.hpp"
+#include <Archivarius.hpp>
 
  DataStorage::DataStorage() {
 

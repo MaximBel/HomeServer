@@ -1,12 +1,12 @@
 /*
- * DataStorage.h
+ * Archivarius.hpp
  *
  *  Created on: Feb 18, 2019
  *      Author: maksym.belei
  */
 
-#ifndef DATASTORAGE_HPP_
-#define DATASTORAGE_HPP_
+#ifndef ARCHIVARIUS_HPP_
+#define ARCHIVARIUS_HPP_
 
 
 
@@ -28,4 +28,4 @@ public:
 };
 
 
-#endif /* DATASTORAGE_HPP_ */
+#endif /* ARCHIVARIUS_HPP_ */
