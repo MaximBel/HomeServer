@@ -15,29 +15,18 @@
 
 using std::string;
 
-struct {
-	string unitName;
-	string unitDescription;
-	uint32_t* dataPointer;
-	uint32_t dataSize;
-} dataUnitInfo;
-
 class DataUnit {
 
 public:
 
-	DataUnit();
+	DataUnit(uint32_t hash);
 	virtual ~DataUnit();
 
-	void setDataUnitInfo(struct dataUnitInfo unitInfo);
+	bool loadData(string file, string& data);
 
-	bool loadData();
-
-	bool saveData();
+	bool saveData(string file, string data);
 
 private:
-
-	struct dataUnitInfo unitInfo;
 
 	bool prepareDataUnit();
 
