@@ -12,8 +12,10 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
+#include <map>
 
 using std::string;
+using std::pair;
 
 class DataUnit {
 
@@ -23,8 +25,10 @@ public:
 	virtual ~DataUnit();
 
 	bool loadData(string file, string& data);
-
 	bool saveData(string file, string data);
+
+	bool loadInfo(pair<uint8_t, string>& pair);
+	bool saveInfo(pair<uint8_t, string> pair);
 
 private:
 

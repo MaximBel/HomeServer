@@ -11,40 +11,47 @@
 #include <iostream>
 #include <stddef.h>
 #include <stdint.h>
-#include "string.h"
+#include <string.h>
 #include <map>
-#include "DataUnit.hpp"
 #include <set>
+#include <memory>
+
+#include "DataUnit.hpp"
 
 using std::string;
 using std::pair;
 using std::set;
+using std::unique_ptr;
+using std::shared_ptr;
 
-enum {
-	SENSOR_NAME = 0,
+
+enum: uint8_t{
+	SENSOR_INFO_NAME = 0,
 	SENSOR_INFO_DESCRIPTION
-};
+} SensorInfo;
 
-class SensorUnit: public DataUnit {
-protected:
-	uint32_t sensorHash;
-	string sensorDescription;
+using SensorInfoPair = pair<typeof(SensorInfo), string>;
+using ListOfSensors = unique_ptr<set<uint32_t>>;
+
+template<typename T> class SensorUnit: public DataUnit {
 
 private:
-	uint32_t
+	uint32_t sensorHash;
+	SensorInfoPair sensorInfo;
+
+	shared_ptr<set<T>> dataSetyPointer;
 
 public:
-	DataUnit(uint32_t hash);
-	virtual	~DataUnit();
+	SensorUnit(uint32_t hash);
+	virtual	~SensorUnit();
 
+	void setSensorInfo(SensorInfoPair info);
+	unique_ptr<SensorInfoPair>& getSensorInfo(SensorInfoPair info);
 
+	void setDataSet(shared_ptr<set<T>> dataPtr);
+	shared_ptr<set<T>> getDataSet(void);
 
-
-	void setSensorHash(uint32_t hash);
-	void setSensorDescription(string description);
-	uint8_t build();
-
-	set<uint32_t> getListOfSensors(void);
+	static ListOfSensors getListOfSensors(void);
 };
 
 
