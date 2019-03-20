@@ -11,7 +11,7 @@
 #include <iostream>
 #include <stddef.h>
 #include <stdint.h>
-#include <string.h>
+#include <string>
 #include <map>
 
 using std::string;
@@ -32,9 +32,15 @@ public:
 
 private:
 
-	static const char DATA_FOLDER[] = "Data";
+	static const string DATA_FOLDER = "Data";
+
+	const string unitPath;
+
+	bool isUnitReady();
 
 	bool prepareDataUnit();
+
+	const string prepareUnitPath(uint32_t hash);
 
 };
 
