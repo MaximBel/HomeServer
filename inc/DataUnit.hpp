@@ -32,6 +32,8 @@ public:
 
 private:
 
+	static const char DATA_FOLDER[] = "Data";
+
 	bool prepareDataUnit();
 
 };
