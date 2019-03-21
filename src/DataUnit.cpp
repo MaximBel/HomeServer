@@ -9,6 +9,9 @@
 
 #include <iostream>
 #include <fstream>
+#include <dirent.h>
+#include "Utils.hpp"
+#include <cstring>
 
 using namespace std;
 
@@ -18,16 +21,16 @@ using std::cout;
 using std::endl;
 using std::to_string;
 
-DataUnit::DataUnit(uint32_t hash) {
 
-	fstream file("test.txt",  ios::out);
+const string DataUnit::DATA_FOLDER = "Data/";
 
+DataUnit::DataUnit(uint32_t hash):
+	unitPath(DATA_FOLDER + to_string(hash) + "/"){
 
+	fstream file(unitPath + "Info.txt",  ios::in);
 
-	if(file.is_open()) {
-
-
-
+	if(!file.is_open()) {
+		prepareDataUnit();
 	}
 
 }
@@ -49,19 +52,39 @@ bool DataUnit::saveInfo(pair<uint8_t, string> pair) {
 
 }
 
-//PRIVATE METHODS
+unique_ptr<set<uint32_t>> DataUnit::getDataUnitList(void) {
+	unique_ptr<set<uint32_t>> unitPtr(new set<uint32_t>);
 
-bool DataUnit::isUnitReady() {
+	    DIR *dir = opendir(DATA_FOLDER.c_str());
 
+	    if(dir == nullptr) {
+	    	return unitPtr;
+	    }
+
+	    struct dirent *entry = readdir(dir);
+
+	    while (entry != NULL) {
+	        if (entry->d_type == DT_DIR) {
+	        	if(!strcmp(entry->d_name, ".") && strcmp(entry->d_name, "..")) {
+	        		unitPtr.get()->emplace(atoi(entry->d_name));
+	        	}
+	        	 printf("Folder in data: %s\n", entry->d_name);
+	        }
+	        entry = readdir(dir);
+	    }
+
+	    closedir(dir);
+
+	    return unitPtr;
 }
+
+//PRIVATE METHODS
 
 bool DataUnit::prepareDataUnit() {
 
 }
 
-string DataUnit::prepareUnitPath(uint32_t hash) {
-	return DATA_FOLDER + to_string(hash);
-}
+
 
 
 
