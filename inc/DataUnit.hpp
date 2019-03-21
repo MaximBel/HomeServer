@@ -40,6 +40,8 @@ private:
 
 	static const string DATA_FOLDER;
 
+	static const string INFO_FILE;
+
 	const string unitPath;
 
 	bool prepareDataUnit();

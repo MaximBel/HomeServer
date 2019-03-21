@@ -12,6 +12,7 @@
 #include <dirent.h>
 #include "Utils.hpp"
 #include <cstring>
+#include <stdio.h>
 
 using namespace std;
 
@@ -24,12 +25,14 @@ using std::to_string;
 
 const string DataUnit::DATA_FOLDER = "Data/";
 
+ const string DataUnit::INFO_FILE = "INFO.txt";
+
 DataUnit::DataUnit(uint32_t hash):
 	unitPath(DATA_FOLDER + to_string(hash) + "/"){
 
-	fstream file(unitPath + "Info.txt",  ios::in);
+	DIR* dir = opendir(unitPath.c_str());
 
-	if(!file.is_open()) {
+	if(dir == nullptr) {
 		prepareDataUnit();
 	}
 
@@ -81,7 +84,9 @@ unique_ptr<set<uint32_t>> DataUnit::getDataUnitList(void) {
 //PRIVATE METHODS
 
 bool DataUnit::prepareDataUnit() {
+	fstream file(unitPath + INFO_FILE,  ios::out);
 
+	file.close();
 }
 
 
