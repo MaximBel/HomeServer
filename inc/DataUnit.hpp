@@ -13,9 +13,13 @@
 #include <stdint.h>
 #include <string>
 #include <map>
+#include <memory>
+#include <set>
 
 using std::string;
 using std::pair;
+using namespace std;
+
 
 class DataUnit {
 
@@ -30,17 +34,15 @@ public:
 	bool loadInfo(pair<uint8_t, string>& pair);
 	bool saveInfo(pair<uint8_t, string> pair);
 
+	unique_ptr<set<uint32_t>> getDataUnitList(void);
+
 private:
 
-	static const string DATA_FOLDER = "Data";
+	static const string DATA_FOLDER;
 
 	const string unitPath;
 
-	bool isUnitReady();
-
 	bool prepareDataUnit();
-
-	const string prepareUnitPath(uint32_t hash);
 
 };
 
