@@ -14,7 +14,13 @@ using namespace std;
 
 int main() {
 
-	volatile auto data = new DataUnit(10);
+	volatile auto data = new DataUnit(20);
+
+	string str;
+
+	data->loadData("debug", str);
+
+	//data->removeDataUnit();
 
 	cout << "!!!Hello World" << endl; // prints !!!Hello World!!!
 	return 0;

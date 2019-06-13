@@ -29,10 +29,13 @@ public:
 	virtual ~DataUnit();
 
 	bool loadData(string file, string& data);
-	bool saveData(string file, string data);
+	bool addData(string file, string data);
+	bool clearData(string file, bool withFile);
 
 	bool loadInfo(pair<uint8_t, string>& pair);
 	bool saveInfo(pair<uint8_t, string> pair);
+
+	void removeDataUnit();
 
 	unique_ptr<set<uint32_t>> getDataUnitList(void);
 
@@ -45,6 +48,8 @@ private:
 	const string unitPath;
 
 	bool prepareDataUnit();
+
+	bool removeDirectoryFR(const char *dirname);
 
 };
 
