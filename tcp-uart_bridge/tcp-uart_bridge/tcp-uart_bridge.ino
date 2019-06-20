@@ -7,18 +7,23 @@
 #define UART_BAUD 115200
 #define bufferSize 40
 #define limitSingleRead bufferSize // maximum frame size, that will be sended if data available
+//#define MODE_AP
 
 // AP settings
 const char *ssid = "STAG-AP";  // You will connect your phone to this Access Point
-const char *pw = "stagappass"; // and this is the password
+const char *pw = "stagappas"; // and this is the password
+
 
 // Socket settings
 IPAddress ip(192, 168, 0, 1); // From RoboRemo app, connect to this IP
-IPAddress netmask(255, 255, 255, 0);
 const int port = 9876; // and this port
-WiFiServer server(port);
 WiFiClient client;
+#ifdef MODE_AP
+IPAddress netmask(255, 255, 255, 0);
+WiFiServer server(port);
+#endif
 
+static void processingCommunication();
 
 void setup() {
 
@@ -26,22 +31,31 @@ void setup() {
 
   Serial.begin(UART_BAUD);
 
+#ifdef MODE_AP
   WiFi.mode(WIFI_AP);
   WiFi.softAPConfig(ip, ip, netmask); // configure ip address for softAP
   WiFi.softAP(ssid, pw); // configure ssid and password for softAP
-
+  
 #ifdef DEBUG
   Serial.println("Starting TCP Server");
 #endif
 
   server.begin(); // start TCP server
+#else
+  // STATION mode (ESP connects to router and gets an IP)
+  // Assuming phone is also connected to that router
+  // from RoboRemo you must connect to the IP of the ESP
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, pw);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(100);
+  }
+#endif
 }
 
-
 void loop() {
-  static uint8_t bufWifiToUart[bufferSize];
-  static uint8_t bufUartToWifi[bufferSize];
-
+#ifdef MODE_AP 
+  // Waiting for client for TCP server  
   do {
 #ifdef DEBUG
     Serial.println("Waiting for TCP client...");
@@ -54,6 +68,26 @@ void loop() {
   Serial.println("TCP client connected.");
 #endif
 
+#else
+  // Trying to connect to server
+
+  while (!client.connect(ip, port)) {
+    Serial.println("Waiting for TCP server...");
+    delay(500);
+  }
+
+#ifdef DEBUG
+  Serial.println("TCP client connected.");
+#endif
+
+#endif
+
+  processingCommunication();
+ }
+
+static void processingCommunication() {
+  static uint8_t bufWifiToUart[bufferSize];
+  static uint8_t bufUartToWifi[bufferSize];
   uint8_t counterWtU = 0;
   uint8_t counterUtW = 0;
 
@@ -79,6 +113,6 @@ void loop() {
   }
 
 #ifdef DEBUG
-  Serial.println("Connection with client was lost!");
+  Serial.println("Connection was lost!");
 #endif
 }
